@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('head.ejs') %>
+  <title>ITMI Shop</title>
+  <body>
+    <%- include('navbar.ejs') %>
+    <div class="container">
+      <h2>จัดการสินค้า</h2>
+      <p>เพิ่ม ลบ แก้ไขข้อมูลในฐานข้อมูล</p>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>ชื่อสินค้า</th>
+            <th>ราคา</th>
+            <th>รายละเอียด</th>
+            <th>ลบ</th>
+            <th>แก้ไข</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% Object.values(products).forEach(function(item){%>
+          <tr>
+            <td><%= item.name %></td>
+            <td><%= item.price %></td>
+            <td><%= item.description %></td>
+            <td><button class="btn btn-danger">ลบ</button></td>
+            <td><button class="btn btn-primary">แก้ไข</button></td>
+          </tr>
+          <%})%>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('head.ejs') %>
+  <title>ITMI Shop</title>
+  <body>
+    <%- include('navbar.ejs') %>
+    <div class="container">
+      <div class="row my-3">
+        <% Object.values(products).forEach(function(item){%>
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card h-100">
+            <a href="404.html"
+              ><img
+                class="card-img-top"
+                src="<%= item.image %>"
+                alt="<%=item.image %>"
+            /></a>
+            <div class="card-body">
+              <h4 class="card-title">
+                <a href="404.html"><%= item.name %></a>
+              </h4>
+              <h5>ราคา <%=item.price %> บาท</h5>
+              <p class="card-text"><%= item.description %></p>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+  </body>
+</html>
