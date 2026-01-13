@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
-const pdata = path.join(__dirname, "../views/products/products.json");
-const prouter = path.join(__dirname, "./myrouter.js");
 
-const products = [
+const pdata = path.join(__dirname, "../views/products/products.json");
+
+let products = [
   {
     name: "โน๊ตบุ๊ค",
     price: 25500,
@@ -34,15 +34,6 @@ function read() {
     return [];
   }
 }
-function readroute() {
-  let data = fs.readFileSync(pdata, "utf8");
-  let dataArray = JSON.parse(data);
-
-  dataArray.push(products);
-
-  const updatedJson = JSON.stringify(dataArray, null, 2);
-  fs.writeFileSync(pdata, updatedJson, "utf8");
-}
 
 function write(data) {
   fs.writeFileSync(pdata, JSON.stringify(data, null, 2), "utf8");
@@ -66,53 +57,61 @@ router.get("/addForm", (req, res) => {
 });
 
 router.get("/manage", (req, res) => {
-  fs.readFile(
-    path.join(__dirname, "../views/products/products.json"),
-    "utf-8",
-    (err, data) => {
-      if (err) throw err;
-      const products = JSON.parse(data);
-
-      res.render("manage.ejs", {
-        products: products,
-      });
-    }
-  );
+  const products = read();
+  res.render("manage.ejs", {
+    products: products,
+  });
 });
 
 //TODO : GET to file json
 router.get("/insert", (req, res) => {
-  const items = read();
-  res.json(items);
+  // const items = read();
+  // res.json(items);
 
-  res.render("index.ejs");
+  res.render("index.ejs", {
+    products: products,
+  });
   //
 });
 
 //TODO: POST to use json
 router.post("/insert", (req, res) => {
-  const items = read();
+  // let products = read();
+  const productId =
+    products.length > 0 ? products[products.length - 1].id + 1 : 1;
 
   const newItem = {
-    id: req.body.id,
+    // id: productId,
     name: req.body.name,
-    price: req.body.price,
+    price: Number(req.body.price),
     image: req.body.image,
     description: req.body.description,
   };
 
-  const nextId = items.length > 0 ? items[items.length - 1].id + 1 : 1;
+  // const nextId = items.length > 0 ? items[items.length - 1].id + 1 : 1;
 
-  newItem.id = nextId;
+  // newItem.id = nextId;
 
-  items.push(newItem);
-  items.push(products);
-  write(items);
-  readroute();
+  // items.push(newItem);
+  products.push(newItem);
 
-  res.render("index.ejs", {
-    products: products,
-  });
+  write(products);
+
+  // let allProducts = read();
+  // allProducts = allProducts.map((item, index) => {
+  //   return {
+  //     id: index + 1,
+  //     name: item.name,
+  //     price: item.price,
+  //     image: item.image,
+  //     description: item.description,
+  //   };
+  // });
+  // write(allProducts);
+  res.redirect("/");
+  // res.render("index.ejs", {
+  //   products: products,
+  // });
 });
 
 module.exports = router;
